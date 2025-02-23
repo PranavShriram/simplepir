@@ -158,9 +158,19 @@ func TestDoublePirBW(t *testing.T) {
 }
 
 // Test SimplePIR correctness on DB with short entries.
-func TestSimplePir(t *testing.T) {
+func BenchmarkSimplePirsN20(b *testing.B) {
 	N := uint64(1 << 20)
-	d := uint64(8)
+	d := uint64(64)
+	pir := SimplePIR{}
+	p := pir.PickParams(N, d, SEC_PARAM, LOGQ)
+
+	DB := MakeRandomDB(N, d, &p)
+	RunPIR(&pir, DB, p, []uint64{262144})
+}
+
+func BenchmarkSimplePirsN24(b *testing.B) {
+	N := uint64(1 << 24)
+	d := uint64(64)
 	pir := SimplePIR{}
 	p := pir.PickParams(N, d, SEC_PARAM, LOGQ)
 
